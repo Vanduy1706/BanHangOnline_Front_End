@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { WrapperButtonMore, WrapperProducts, WrapperTypeProduct } from './style'
+import { WrapperProducts } from './style'
 import CardComponent from '../../components/CardComponent/CardComponent'
 import { useQuery } from '@tanstack/react-query'
 import * as ProductService from '../../services/ProductService'
-import { useSelector } from 'react-redux'
 import Loading from '../../components/LoadingComponent/Loading'
-import { useDebounce } from '../../hooks/useDebounce'
 
 const FoodTypePage = () => {
-//   const searchProduct = useSelector((state) => state?.product?.search)
-//   const searchDebounce = useDebounce(searchProduct, 500)
   const [loading, setLoading] = useState(false)
   const [limit, setLimit] = useState(50)
   const [typeProduct, setTypeProduct] = useState([])
@@ -18,7 +14,7 @@ const FoodTypePage = () => {
     const limit = context?.queryKey && context?.queryKey[1]
     const search = context?.queryKey && context?.queryKey[2]
     const res = await ProductService.getAllProduct(search, limit)
-      return res
+    return res
   }
 
   const fetchAllTypeProduct = async () => {
@@ -62,7 +58,6 @@ const FoodTypePage = () => {
                                             id={product._id}
                                             />
                                         ) : null}
-                                        
                                         </>
                                     )
                                     })}  

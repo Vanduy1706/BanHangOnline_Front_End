@@ -38,7 +38,6 @@ const AdminPage = () => {
     setKeySelected(key)
   }
 
-
   return (
     <>
       <HeaderComponent isHiddenSearch isHiddenCart/>

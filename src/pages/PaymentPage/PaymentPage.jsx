@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Lable, WrapperCountOrder, WrapperInfo, WrapperLeft, WrapperRadio, WrapperRight, WrapperTotal } from './style';
-import { Button, Checkbox, Form, Radio } from 'antd';
+import { Lable, WrapperInfo, WrapperLeft, WrapperRadio, WrapperRight, WrapperTotal } from './style';
+import { Form, Radio } from 'antd';
 
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
 import { convertPice } from '../../utils';

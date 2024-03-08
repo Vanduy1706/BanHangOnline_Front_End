@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux'
 import { updateUser } from '../../redux/slides/userSlide'
 import Loading from '../../components/LoadingComponent/Loading'
 
-
 const SignInPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false)
   const location = useLocation()
@@ -66,8 +65,6 @@ const SignInPage = () => {
     })
   } 
 
-
-  
   const handleNavigateSignUp = () => {
     navigate('/sign-up')
   }

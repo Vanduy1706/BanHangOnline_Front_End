@@ -21,7 +21,6 @@ const AdminProduct = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false)
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
-  const [typeSelect, setTypeSelect] = useState('')
   const user = useSelector((state) => state?.user)
   const searchInput = useRef(null);
   const initial = () => ({
@@ -63,7 +62,6 @@ const AdminProduct = () => {
         return res;
     } 
   )
-
 
   const mutationUpdate = useMutationhooks(
     (data) => {
@@ -176,12 +174,10 @@ const AdminProduct = () => {
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    // setSearchText(selectedKeys[0]);
-    // setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
-    // setSearchText('');
   };
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -241,20 +237,6 @@ const AdminProduct = () => {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    // render: (text) =>
-    //   searchedColumn === dataIndex ? (
-    //     <Highlighter
-    //       highlightStyle={{
-    //         backgroundColor: '#ffc069',
-    //         padding: 0,
-    //       }}
-    //       searchWords={[searchText]}
-    //       autoEscape
-    //       textToHighlight={text ? text.toString() : ''}
-    //     />
-    //   ) : (
-    //     text
-    //   ),
   });
 
   const columns = [
@@ -317,6 +299,7 @@ const AdminProduct = () => {
       render: renderAction
     },
   ];
+
   const dataTable = products?.data?.length && products?.data?.map((products) => {
     return {...products, key: products._id}
   })
@@ -374,7 +357,6 @@ const AdminProduct = () => {
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false)
   }
-
 
   const handleDeleteProduct = () => {
     mutationDelete.mutate({ id: rowSelected, token: user?.access_token }, {

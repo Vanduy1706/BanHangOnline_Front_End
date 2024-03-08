@@ -10,11 +10,6 @@ const TableComponent = (props) => {
     onChange: (selectedRowKeys, selectedRows) => {
       setRowSelectedKeys(selectedRowKeys)
     },
-    // getCheckboxProps: (record) => ({
-    //   disabled: record.name === 'Disabled User',
-    //   // Column configuration not to be checkeds
-    //   name: record.name,
-    // }),
   };
 
   const handleDeleteAll = () => {

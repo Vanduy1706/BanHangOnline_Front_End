@@ -1,7 +1,6 @@
 import { Col, Row, Image, Rate, message } from 'antd'
-import React, { useEffect, useMemo, useState } from 'react'
-import ImageProductSmall from '../../assets/images/small.webp'
-import { WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, WrapperQualityProduct, WrapperStyleColImage, WrapperStyleImageSmall, WrapperStyleNameProduct, WrapperStyleTextSell } from './style'
+import React, { useEffect, useState } from 'react'
+import { WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, WrapperQualityProduct, WrapperStyleNameProduct, WrapperStyleTextSell } from './style'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import ButtonComponent from '../ButtonComponent/ButtonComponent'
 import * as ProductService from '../../services/ProductService'
@@ -75,18 +74,6 @@ const ProductDetailsComponent = ({idProduct}) => {
         if(!user?.id) {
             navigate('/sign-in', {state: location?.pathname})
         }else {
-            // {
-            //     name: { type: String, required: true },
-            //     amount: { type: Number, required: true },
-            //     image: { type: String, required: true },
-            //     price: { type: Number, required: true },
-            //     discount: { type: Number },
-            //     product: {
-            //         type: mongoose.Schema.Types.ObjectId,
-            //         ref: 'Product',
-            //         required: true,
-            //     },
-            // },
             const orderRedux = order?.orderItems?.find((item) => item.product === productDetails?._id) 
             if((orderRedux?.amount + numProduct) <= orderRedux?.countInStock || (!orderRedux && productDetails?.countInStock > 0)) {
                 dispatch(addOrderProduct({
@@ -111,20 +98,6 @@ const ProductDetailsComponent = ({idProduct}) => {
         <Row style={{padding:'16px', background:'#fff',borderRadius:"4px"}}>
             <Col span={10} style={{ borderRight:"1px solid #e5e5e5",paddingRight:"8px"}}>
                 <Image src={productDetails?.image} alt="image product" preview={false}/>
-                {/* <Row style={{paddingTop:"10px"}}>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleImageSmall src={ImageProductSmall} alt="image small" preview={false} />
-                    </WrapperStyleColImage>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleImageSmall src={ImageProductSmall} alt="image small" preview={false} />
-                    </WrapperStyleColImage>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleImageSmall src={ImageProductSmall} alt="image small" preview={false} />
-                    </WrapperStyleColImage>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleImageSmall src={ImageProductSmall} alt="image small" preview={false} />
-                    </WrapperStyleColImage>
-                </Row> */}
             </Col>
             <Col span={14} style={{paddingLeft:"10px"}}>
                 <WrapperStyleNameProduct>{productDetails?.name}</WrapperStyleNameProduct>

@@ -79,7 +79,6 @@ const AdminUser = () => {
 
   const getAllUsers = async () => {
     const res = await UserService.getAllUser(user?.access_token)
-
     return res
   }
 
@@ -130,12 +129,10 @@ const AdminUser = () => {
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    // setSearchText(selectedKeys[0]);
-    // setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
-    // setSearchText('');
   };
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -195,20 +192,6 @@ const AdminUser = () => {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    // render: (text) =>
-    //   searchedColumn === dataIndex ? (
-    //     <Highlighter
-    //       highlightStyle={{
-    //         backgroundColor: '#ffc069',
-    //         padding: 0,
-    //       }}
-    //       searchWords={[searchText]}
-    //       autoEscape
-    //       textToHighlight={text ? text.toString() : ''}
-    //     />
-    //   ) : (
-    //     text
-    //   ),
   });
   
   const columns = [
@@ -256,6 +239,7 @@ const AdminUser = () => {
       render: renderAction
     },
   ];
+
   const dataTable = users?.data?.length && users?.data?.map((users) => {
     return {...users, key: users._id, isAdmin: users.isAdmin ? 'TRUE' : 'FALSE' }
   })
@@ -316,7 +300,6 @@ const AdminUser = () => {
     })
   }
 
-
   const handleOnchangeAvatarDetails = async ({fileList}) => {
     const file = fileList[0]
     if(!file.url && !file.preview) {
@@ -335,6 +318,7 @@ const AdminUser = () => {
       }
     })
   }
+  
   return (
     <div>
       <WrapperHeader>Quản lý người dùng</WrapperHeader>

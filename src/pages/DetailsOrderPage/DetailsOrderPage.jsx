@@ -8,13 +8,12 @@ import { convertPice } from '../../utils'
 import Loading from '../../components/LoadingComponent/Loading'
 
 export const DetailsOrderPage = () => {
-   const params = useParams()
+  const params = useParams()
   const location = useLocation()
   const {state} = location
-   const {id} = params
+  const {id} = params
   
-
-   const fetchDetailsOrder = async () => {
+  const fetchDetailsOrder = async () => {
     const res = await OrderService.getDetailsOrder(id, state?.token)
     return res.data
   }
@@ -79,6 +78,7 @@ export const DetailsOrderPage = () => {
                           border: '1px solid rgb(238, 238, 238)',
                           padding: '2px'
                         }}
+                        alt='Hình ảnh'
                       />
                       <div style={{
                         width: 260,

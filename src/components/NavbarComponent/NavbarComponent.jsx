@@ -4,7 +4,6 @@ import { Checkbox, Rate } from 'antd'
 import TypeProduct from '../TypeProduct/TypeProduct'
 import * as ProductService from '../../services/ProductService'
 
-
 const NavbarComponent = () => {
     const onChange = () => { }
     const [typeProduct, setTypeProduct] = useState([])
@@ -67,7 +66,6 @@ const NavbarComponent = () => {
               <TypeProduct name={item} key={item} />
             )
           })}
-            {/* {renderContent('text', ['Do An Vat', 'Do An', 'Food'])} */}
         </WrapperContent>
     </div> 
   )

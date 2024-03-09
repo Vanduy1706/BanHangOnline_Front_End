@@ -69,8 +69,9 @@ export const MyOrderPage = () => {
             objectFit:'cover',
             border: '1px solid rgb(238, 238, 238)',
             padding: '2px'
-        }} 
-      />
+            }} 
+            alt='Hình ảnh'
+        />
         <div style={{
           width:'260px',
           overflow:'hidden',

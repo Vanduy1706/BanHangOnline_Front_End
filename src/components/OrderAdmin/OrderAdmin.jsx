@@ -1,16 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { WrapperHeader, WrapperUploadFile } from './style'
-import { Button, Form, Space } from 'antd'
+import React from 'react'
+import { WrapperHeader } from './style'
+import { Button, Space } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import TableComponent from '../TableComponent/TableComponent'
 import InputComponent from '../InputComponent/InputComponent'
-import DrawerComponent from '../DrawerComponent/DrawerComponent'
-import Loading from '../LoadingComponent/Loading'
-import ModalComponent from '../ModalComponent/ModalComponent'
-import { convertPice, getBase64 } from '../../utils'
-import * as message from '../../components/Message/message'
+import { convertPice } from '../../utils'
 import { useSelector } from 'react-redux'
-import { useMutationhooks } from '../../hooks/useMutationHooks'
 import * as OrderService from '../../services/OrderService'
 import { useQuery } from '@tanstack/react-query'
 import { orderContant } from '../../contant'
@@ -19,17 +14,13 @@ import PiChart from './PiChart'
 const OrderAdmin = () => {
   const user = useSelector((state) => state?.user)
 
-
   const getAllOrder = async () => {
     const res = await OrderService.getAllOrder(user?.access_token)
     return res
   }
 
- 
-
   const queryOrder = useQuery({ queryKey: ['orders'],queryFn : getAllOrder })
   const { isLoading : isLoadingOrders, data : orders } = queryOrder
- 
 
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -40,11 +31,9 @@ const OrderAdmin = () => {
         onKeyDown={(e) => e.stopPropagation()}
       >
         <InputComponent
-          // ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          // onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
             display: 'block',
@@ -53,7 +42,6 @@ const OrderAdmin = () => {
         <Space>
           <Button
             type="primary"
-            // onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
             style={{
@@ -63,7 +51,6 @@ const OrderAdmin = () => {
             Search
           </Button>
           <Button
-            // onClick={() => clearFilters && handleReset(clearFilters)}
             size="small"
             style={{
               width: 90,
@@ -85,23 +72,8 @@ const OrderAdmin = () => {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
-        // setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    // render: (text) =>
-    //   searchedColumn === dataIndex ? (
-    //     <Highlighter
-    //       highlightStyle={{
-    //         backgroundColor: '#ffc069',
-    //         padding: 0,
-    //       }}
-    //       searchWords={[searchText]}
-    //       autoEscape
-    //       textToHighlight={text ? text.toString() : ''}
-    //     />
-    //   ) : (
-    //     text
-    //   ),
   });
   
   const columns = [

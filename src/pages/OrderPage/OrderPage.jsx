@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WrapperCountOrder, WrapperInfo, WrapperItemOrder, WrapperLeft, WrapperListOrder, WrapperPriceDiscount, WrapperRight, WrapperStyleHeader, WrapperTotal } from './style';
-import { Button, Checkbox, Form } from 'antd';
+import { Checkbox, Form } from 'antd';
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { WrapperInputNumber } from '../../components/ProductDetailsComponent/style';
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
@@ -57,7 +57,6 @@ export const OrderPage = () => {
   }
 
   const handleOnchangeCheckAll = (e) => {
-
     if(e.target.checked) {
       const newListChecked = [] 
       order?.orderItems?.forEach((item) => {
@@ -231,7 +230,7 @@ export const OrderPage = () => {
                   <WrapperItemOrder key={order?.product}>
                   <div style={{width: '390px', display:'flex', alignItems:'center', gap: 4}}>
                     <Checkbox onChange={onChange} value={order?.product} checked={listChecked.includes(order?.product)}></Checkbox>
-                    <img src={order?.image} style={{width: '77px', height:'79px', objectFit:'cover'}} />
+                    <img src={order?.image} style={{width: '77px', height:'79px', objectFit:'cover'}} alt='Hình ảnh'/>
                     <div style={{
                       width:'260px',
                       overflow:'hidden',

@@ -33,6 +33,7 @@ const AdminUser = () => {
 
   const [form] = Form.useForm();
 
+  // Mutation thực hiện thao tác thay đổi dữ liệu như thêm, sửa, xóa  
   const mutationUpdate = useMutationhooks(
     (data) => {
         const { 
@@ -77,6 +78,7 @@ const AdminUser = () => {
     },
   )
 
+  // Các hàm dùng để gọi các dịch vụ để lấy dữ liệu sản phẩm từ máy chủ
   const getAllUsers = async () => {
     const res = await UserService.getAllUser(user?.access_token)
     return res
@@ -96,17 +98,6 @@ const AdminUser = () => {
     }
     setIsLoadingUpdate(false)
   }
-  
-  useEffect(() => {
-    form.setFieldsValue(stateUserDetails)
-  }, [form, stateUserDetails])
-
-  useEffect(() => {
-    if(rowSelected && isOpenDrawer){
-      setIsLoadingUpdate(true)
-      fetchGetDetailsUser(rowSelected)
-    }
-  }, [rowSelected, isOpenDrawer])
 
   const handleDetailsProduct = () => {
     setIsOpenDrawer(true)
@@ -127,6 +118,7 @@ const AdminUser = () => {
     )
   }
 
+  // Những hàm xử lý sự kiện
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
   };
@@ -244,23 +236,6 @@ const AdminUser = () => {
     return {...users, key: users._id, isAdmin: users.isAdmin ? 'TRUE' : 'FALSE' }
   })
 
-  useEffect(() => {
-    if(isSuccessDeleted && dataDeleted?.status === 'OK'){
-      message.success()
-      handleCancelDelete()
-    }else if (isErrorDeleted){
-      message.error()
-    }
-  }, [isSuccessDeleted])
-
-  useEffect(() => {
-    if(isSuccessDeletedMany && dataDeletedMany?.status === 'OK'){
-      message.success()
-    }else if (isErrorDeletedMany){
-      message.error()
-    }
-  }, [isSuccessDeletedMany])
-
   const handleCloseDrawer = () => {
     setIsOpenDrawer(false);
     setStateUserDetails({
@@ -271,15 +246,6 @@ const AdminUser = () => {
     })
     form.resetFields()
   }
-
-  useEffect(() => {
-    if(isSuccessUpdated && dataUpdated?.status === 'OK'){
-      message.success()
-      handleCloseDrawer()
-    }else if (isErrorUpdated){
-      message.error()
-    }
-  }, [isSuccessUpdated])
 
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false)
@@ -318,6 +284,44 @@ const AdminUser = () => {
       }
     })
   }
+
+  // useEffect thực hiện các tác vụ khi xảy ra sự thay đổi
+  useEffect(() => {
+    if(isSuccessDeleted && dataDeleted?.status === 'OK'){
+      message.success()
+      handleCancelDelete()
+    }else if (isErrorDeleted){
+      message.error()
+    }
+  }, [isSuccessDeleted])
+
+  useEffect(() => {
+    if(isSuccessDeletedMany && dataDeletedMany?.status === 'OK'){
+      message.success()
+    }else if (isErrorDeletedMany){
+      message.error()
+    }
+  }, [isSuccessDeletedMany])
+  
+  useEffect(() => {
+    form.setFieldsValue(stateUserDetails)
+  }, [form, stateUserDetails])
+
+  useEffect(() => {
+    if(rowSelected && isOpenDrawer){
+      setIsLoadingUpdate(true)
+      fetchGetDetailsUser(rowSelected)
+    }
+  }, [rowSelected, isOpenDrawer])
+
+  useEffect(() => {
+    if(isSuccessUpdated && dataUpdated?.status === 'OK'){
+      message.success()
+      handleCloseDrawer()
+    }else if (isErrorUpdated){
+      message.error()
+    }
+  }, [isSuccessUpdated])
   
   return (
     <div>

@@ -35,28 +35,6 @@ const ProductDetailsComponent = ({idProduct}) => {
         }
     }
 
-    useEffect(() => {
-        initFacebookSDK()
-    }, [])
-
-     useEffect(() => {
-        const orderRedux = order?.orderItems?.find((item) => item.product === productDetails?._id) 
-        if((orderRedux?.amount + numProduct) <= orderRedux?.countInStock || (!orderRedux && productDetails?.countInStock > 0)) {
-            setErrorLimitOrder(false)
-        } else if(productDetails?.countInStock === 0){
-            setErrorLimitOrder(true)
-        }
-    },[numProduct])
-
-    useEffect(() => {//trong phần orderslide
-        if(order.isSuccessOrder) {
-            message.success('Đã thêm vào giỏ hàng')
-        }
-        return () => {
-            dispatch(resetOrder())
-        }
-    }, [order.isSuccessOrder])
-
     const handleChangeCount = (type, limited) => {
         if(type === 'increase') {
             if(!limited) {
@@ -92,6 +70,28 @@ const ProductDetailsComponent = ({idProduct}) => {
             }
         }
     }
+
+    useEffect(() => {
+        initFacebookSDK()
+    }, [])
+
+     useEffect(() => {
+        const orderRedux = order?.orderItems?.find((item) => item.product === productDetails?._id) 
+        if((orderRedux?.amount + numProduct) <= orderRedux?.countInStock || (!orderRedux && productDetails?.countInStock > 0)) {
+            setErrorLimitOrder(false)
+        } else if(productDetails?.countInStock === 0){
+            setErrorLimitOrder(true)
+        }
+    },[numProduct])
+
+    useEffect(() => {//trong phần orderslide
+        if(order.isSuccessOrder) {
+            message.success('Đã thêm vào giỏ hàng')
+        }
+        return () => {
+            dispatch(resetOrder())
+        }
+    }, [order.isSuccessOrder])
 
   return (
     <Loading isLoading={isLoading}>

@@ -16,13 +16,20 @@ import ModalComponent from '../ModalComponent/ModalComponent'
 
 
 const AdminProduct = () => {
+  // Kiểm soát trạng thái đóng mở cửa sổ của tạo sản phẩm
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Lưu trữ id của dòng được chọn trong bảng hoặc danh sách
   const [rowSelected, setRowSelected] = useState('')
+
+  // Kiểm soát trạng thái đóng mở cửa sổ của sữa sản phẩm
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
+
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false)
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
   const user = useSelector((state) => state?.user)
   const searchInput = useRef(null);
+  
   const initial = () => ({
     name: '',
     price: '',
@@ -40,6 +47,7 @@ const AdminProduct = () => {
 
   const [form] = Form.useForm();
 
+  // Mutation thực hiện thao tác thay đổi dữ liệu như thêm, sửa, xóa
   const mutation = useMutationhooks(
     (data) => {
         const { 
@@ -100,6 +108,7 @@ const AdminProduct = () => {
     },
   )
 
+  // Các hàm dùng để gọi các dịch vụ để lấy dữ liệu sản phẩm từ máy chủ
   const getAllProduct = async () => {
     const res = await ProductService.getAllProduct()
     return res
@@ -122,21 +131,6 @@ const AdminProduct = () => {
     setIsLoadingUpdate(false)
   }
   
-  useEffect(() => {
-    if(!isModalOpen) {
-      form.setFieldsValue(stateProductDetails)
-    }else {
-      form.setFieldsValue(initial())
-    }
-  }, [form, stateProductDetails, isModalOpen])
-
-  useEffect(() => {
-    if(rowSelected && isOpenDrawer){
-      setIsLoadingUpdate(true)
-      fetchGetDetailsProduct(rowSelected)
-    }
-  }, [rowSelected, isOpenDrawer])
-
   const handleDetailsProduct = () => {
     setIsOpenDrawer(true)
   }
@@ -171,7 +165,7 @@ const AdminProduct = () => {
     )
   }
 
-
+  // Những hàm xử lý sự kiện
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
   };
@@ -304,32 +298,6 @@ const AdminProduct = () => {
     return {...products, key: products._id}
   })
 
-  useEffect(() => {
-    if(isSuccess && data?.status === 'OK'){
-      message.success()
-      handleCancel()
-    }else if (isError){
-      message.error()
-    }
-  }, [isSuccess])
-
-  useEffect(() => {
-    if(isSuccessDeletedMany && dataDeletedMany?.status === 'OK'){
-      message.success()
-    }else if (isErrorDeletedMany){
-      message.error()
-    }
-  }, [isSuccessDeletedMany])
-
-  useEffect(() => {
-    if(isSuccessDeleted && dataDeleted?.status === 'OK'){
-      message.success()
-      handleCancelDelete()
-    }else if (isErrorDeleted){
-      message.error()
-    }
-  }, [isSuccessDeleted])
-
   const handleCloseDrawer = () => {
     setIsOpenDrawer(false);
     setStateProductDetails({
@@ -344,16 +312,7 @@ const AdminProduct = () => {
     })
     form.resetFields()
   }
-
-  useEffect(() => {
-    if(isSuccessUpdated && dataUpdated?.status === 'OK'){
-      message.success()
-      handleCloseDrawer()
-    }else if (isErrorUpdated){
-      message.error()
-    }
-  }, [isSuccessUpdated])
-
+  
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false)
   }
@@ -450,6 +409,57 @@ const AdminProduct = () => {
       })
 
   }
+
+  // useEffect thực hiện các tác vụ khi xảy ra sự thay đổi
+  useEffect(() => {
+    if(!isModalOpen) {
+      form.setFieldsValue(stateProductDetails)
+    }else {
+      form.setFieldsValue(initial())
+    }
+  }, [form, stateProductDetails, isModalOpen])
+
+  useEffect(() => {
+    if(rowSelected && isOpenDrawer){
+      setIsLoadingUpdate(true)
+      fetchGetDetailsProduct(rowSelected)
+    }
+  }, [rowSelected, isOpenDrawer])
+
+  useEffect(() => {
+    if(isSuccess && data?.status === 'OK'){
+      message.success()
+      handleCancel()
+    }else if (isError){
+      message.error()
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    if(isSuccessDeletedMany && dataDeletedMany?.status === 'OK'){
+      message.success()
+    }else if (isErrorDeletedMany){
+      message.error()
+    }
+  }, [isSuccessDeletedMany])
+
+  useEffect(() => {
+    if(isSuccessDeleted && dataDeleted?.status === 'OK'){
+      message.success()
+      handleCancelDelete()
+    }else if (isErrorDeleted){
+      message.error()
+    }
+  }, [isSuccessDeleted])
+
+  useEffect(() => {
+    if(isSuccessUpdated && dataUpdated?.status === 'OK'){
+      message.success()
+      handleCloseDrawer()
+    }else if (isErrorUpdated){
+      message.error()
+    }
+  }, [isSuccessUpdated])
 
   return (
     <div>

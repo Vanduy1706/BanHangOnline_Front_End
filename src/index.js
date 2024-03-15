@@ -25,5 +25,3 @@ root.render(
   // </React.StrictMode>
 );
 
-
-// comment

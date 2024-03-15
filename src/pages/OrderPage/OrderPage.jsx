@@ -10,7 +10,8 @@ import { convertPice } from '../../utils';
 import ModalComponent from '../../components/ModalComponent/ModalComponent';
 import InputComponent from '../../components/InputComponent/InputComponent';
 import * as UserService from '../../services/UserService'
-import * as message from '../../components/Message/message'
+// import * as message from '../../components/Message/message'
+import MessageService from '../../components/Message/message'
 import { useMutationhooks } from '../../hooks/useMutationHooks';
 import Loading from '../../components/LoadingComponent/Loading';
 import { updateUser } from '../../redux/slides/userSlide';
@@ -18,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import StepComponent from '../../components/stepComponent/StepComponent';
 
 export const OrderPage = () => {
+  const message = MessageService.getInstance()
   const order = useSelector((state) => state.order)
   const user = useSelector((state) => state.user)
 

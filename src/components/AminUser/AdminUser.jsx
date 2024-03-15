@@ -8,13 +8,15 @@ import DrawerComponent from '../DrawerComponent/DrawerComponent'
 import Loading from '../LoadingComponent/Loading'
 import ModalComponent from '../ModalComponent/ModalComponent'
 import { getBase64 } from '../../utils'
-import * as message from '../../components/Message/message'
+// import * as message from '../../components/Message/message'
+import MessageService from '../../components/Message/message'
 import { useSelector } from 'react-redux'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import * as UserService from '../../services/UserService'
 import { useQuery } from '@tanstack/react-query'
 
 const AdminUser = () => {
+  const message = MessageService.getInstance()
   const [rowSelected, setRowSelected] = useState('')
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false)

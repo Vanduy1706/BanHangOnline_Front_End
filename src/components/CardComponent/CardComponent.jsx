@@ -21,7 +21,7 @@ const CardComponent = (props) => {
         cover={<img alt="example" src={image} />}
         onClick={() => handleDetailsProduct(id)}
     >
-      <img src={logo} style={{ width: '32px', height:'32px', position:'absolute', top:'0', left:'0', marginLeft:'-1px',marginTop:'-1px'}}/>  
+      <img src={logo} alt='Hình ảnh' style={{ width: '32px', height:'32px', position:'absolute', top:'0', left:'0', marginLeft:'-1px',marginTop:'-1px'}}/>  
       <StyleNameProduct>{name}</StyleNameProduct>
         <WrapperReporText>
             <span style={{marginRight:'4px'}}>

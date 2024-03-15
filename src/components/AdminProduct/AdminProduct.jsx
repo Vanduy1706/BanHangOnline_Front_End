@@ -8,7 +8,8 @@ import { getBase64, renderOptions } from '../../utils'
 import * as ProductService from '../../services/ProductService'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import Loading from '../../components/LoadingComponent/Loading'
-import * as message from '../../components/Message/message'
+// import * as message from '../../components/Message/message'
+import MessageService from '../../components/Message/message'
 import { useQuery } from '@tanstack/react-query'
 import DrawerComponent from '../DrawerComponent/DrawerComponent'
 import { useSelector } from 'react-redux'
@@ -16,14 +17,22 @@ import ModalComponent from '../ModalComponent/ModalComponent'
 
 
 const AdminProduct = () => {
+  const message = MessageService.getInstance()
+
+  // Kiểm soát trạng thái đóng mở cửa sổ của tạo sản phẩm
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Lưu trữ id của dòng được chọn trong bảng hoặc danh sách
   const [rowSelected, setRowSelected] = useState('')
+
+  // Kiểm soát trạng thái đóng mở cửa sổ của sữa sản phẩm
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
+
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false)
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
-  const [typeSelect, setTypeSelect] = useState('')
   const user = useSelector((state) => state?.user)
   const searchInput = useRef(null);
+  
   const initial = () => ({
     name: '',
     price: '',
@@ -41,6 +50,7 @@ const AdminProduct = () => {
 
   const [form] = Form.useForm();
 
+  // Mutation thực hiện thao tác thay đổi dữ liệu như thêm, sửa, xóa
   const mutation = useMutationhooks(
     (data) => {
         const { 
@@ -63,7 +73,6 @@ const AdminProduct = () => {
         return res;
     } 
   )
-
 
   const mutationUpdate = useMutationhooks(
     (data) => {
@@ -102,6 +111,7 @@ const AdminProduct = () => {
     },
   )
 
+  // Các hàm dùng để gọi các dịch vụ để lấy dữ liệu sản phẩm từ máy chủ
   const getAllProduct = async () => {
     const res = await ProductService.getAllProduct()
     return res
@@ -124,21 +134,6 @@ const AdminProduct = () => {
     setIsLoadingUpdate(false)
   }
   
-  useEffect(() => {
-    if(!isModalOpen) {
-      form.setFieldsValue(stateProductDetails)
-    }else {
-      form.setFieldsValue(initial())
-    }
-  }, [form, stateProductDetails, isModalOpen])
-
-  useEffect(() => {
-    if(rowSelected && isOpenDrawer){
-      setIsLoadingUpdate(true)
-      fetchGetDetailsProduct(rowSelected)
-    }
-  }, [rowSelected, isOpenDrawer])
-
   const handleDetailsProduct = () => {
     setIsOpenDrawer(true)
   }
@@ -173,15 +168,13 @@ const AdminProduct = () => {
     )
   }
 
-
+  // Những hàm xử lý sự kiện
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    // setSearchText(selectedKeys[0]);
-    // setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
-    // setSearchText('');
   };
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -241,20 +234,6 @@ const AdminProduct = () => {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    // render: (text) =>
-    //   searchedColumn === dataIndex ? (
-    //     <Highlighter
-    //       highlightStyle={{
-    //         backgroundColor: '#ffc069',
-    //         padding: 0,
-    //       }}
-    //       searchWords={[searchText]}
-    //       autoEscape
-    //       textToHighlight={text ? text.toString() : ''}
-    //     />
-    //   ) : (
-    //     text
-    //   ),
   });
 
   const columns = [
@@ -317,35 +296,10 @@ const AdminProduct = () => {
       render: renderAction
     },
   ];
+
   const dataTable = products?.data?.length && products?.data?.map((products) => {
     return {...products, key: products._id}
   })
-
-  useEffect(() => {
-    if(isSuccess && data?.status === 'OK'){
-      message.success()
-      handleCancel()
-    }else if (isError){
-      message.error()
-    }
-  }, [isSuccess])
-
-  useEffect(() => {
-    if(isSuccessDeletedMany && dataDeletedMany?.status === 'OK'){
-      message.success()
-    }else if (isErrorDeletedMany){
-      message.error()
-    }
-  }, [isSuccessDeletedMany])
-
-  useEffect(() => {
-    if(isSuccessDeleted && dataDeleted?.status === 'OK'){
-      message.success()
-      handleCancelDelete()
-    }else if (isErrorDeleted){
-      message.error()
-    }
-  }, [isSuccessDeleted])
 
   const handleCloseDrawer = () => {
     setIsOpenDrawer(false);
@@ -361,20 +315,10 @@ const AdminProduct = () => {
     })
     form.resetFields()
   }
-
-  useEffect(() => {
-    if(isSuccessUpdated && dataUpdated?.status === 'OK'){
-      message.success()
-      handleCloseDrawer()
-    }else if (isErrorUpdated){
-      message.error()
-    }
-  }, [isSuccessUpdated])
-
+  
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false)
   }
-
 
   const handleDeleteProduct = () => {
     mutationDelete.mutate({ id: rowSelected, token: user?.access_token }, {
@@ -468,6 +412,57 @@ const AdminProduct = () => {
       })
 
   }
+
+  // useEffect thực hiện các tác vụ khi xảy ra sự thay đổi
+  useEffect(() => {
+    if(!isModalOpen) {
+      form.setFieldsValue(stateProductDetails)
+    }else {
+      form.setFieldsValue(initial())
+    }
+  }, [form, stateProductDetails, isModalOpen])
+
+  useEffect(() => {
+    if(rowSelected && isOpenDrawer){
+      setIsLoadingUpdate(true)
+      fetchGetDetailsProduct(rowSelected)
+    }
+  }, [rowSelected, isOpenDrawer])
+
+  useEffect(() => {
+    if(isSuccess && data?.status === 'OK'){
+      message.success()
+      handleCancel()
+    }else if (isError){
+      message.error()
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    if(isSuccessDeletedMany && dataDeletedMany?.status === 'OK'){
+      message.success()
+    }else if (isErrorDeletedMany){
+      message.error()
+    }
+  }, [isSuccessDeletedMany])
+
+  useEffect(() => {
+    if(isSuccessDeleted && dataDeleted?.status === 'OK'){
+      message.success()
+      handleCancelDelete()
+    }else if (isErrorDeleted){
+      message.error()
+    }
+  }, [isSuccessDeleted])
+
+  useEffect(() => {
+    if(isSuccessUpdated && dataUpdated?.status === 'OK'){
+      message.success()
+      handleCloseDrawer()
+    }else if (isErrorUpdated){
+      message.error()
+    }
+  }, [isSuccessUpdated])
 
   return (
     <div>

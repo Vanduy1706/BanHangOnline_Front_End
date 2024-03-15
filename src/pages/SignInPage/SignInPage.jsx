@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux'
 import { updateUser } from '../../redux/slides/userSlide'
 import Loading from '../../components/LoadingComponent/Loading'
 
-
 const SignInPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false)
   const location = useLocation()
@@ -64,16 +63,43 @@ const SignInPage = () => {
       email,
       password
     })
-  } 
-
-
+  }
   
+  // Áp dụng HOC để mở rộng ButtonCompoent cho việc đăng nhập bằng Google, Facebook
+  const loginWithMedia = (Component) => {
+    return ({ onClick, loginType, ...rest}) => {
+      const handleLoginGoogle = () => {
+        // Xử lý logic cho google
+        console.log("Đã đăng nhập Google")
+      };
+
+      const handleLoginFacebook = () => {
+        // Xử lý logic cho Facebook
+        console.log("Đã đăng nhập Facebook")
+      };
+
+      return(
+        loginType === 'Google' ? (<Component
+          onClick={handleLoginGoogle}
+          {...rest}
+        />) : 
+        loginType === 'Facebook' ? (<Component
+          onClick={handleLoginFacebook}
+          {...rest}
+        />) : null
+      )
+    }
+  }
+
+  // Sử dụng HOC để tái sử dụng button component
+  const ButtonMediaComponent = loginWithMedia(ButtonComponent);
+
   const handleNavigateSignUp = () => {
     navigate('/sign-up')
   }
   return (
     <div style={{display:'flex',alignItems:'center',justifyContent:'center',background:'#ccc',height:'100vh'}}>
-      <div style={{ width:'800px', height:'445px',borderRadius:'6px',background:'#fff',display:'flex'}}>
+      <div style={{ width:'800px', height:'fit-content',borderRadius:'6px',background:'#fff',display:'flex'}}>
         <WrapperContainerLeft>
           <h1>Xin Chào</h1>
           <p>Đăng nhập vào tài khoản</p>
@@ -96,9 +122,26 @@ const SignInPage = () => {
                     styleButton={{background : 'rgb(255, 57, 69)', height:'48px',width:'100%',border:'none',borderRadius:'4px', margin:'26px 0 10px'}}
                     textbutton={"Đăng Nhập"}
                     styletextbutton={{color:"#fff",fontSize:"15px",fontWeight:"700"}} />
-          </Loading>
+            </Loading>
               <p><WrapperTextLight>Quên Mật Khẩu?</WrapperTextLight></p>
               <p>Chưa có tài khoản? <WrapperTextLight onClick={handleNavigateSignUp}>Tạo tài khoản</WrapperTextLight></p>
+            <Loading isLoading={isLoading}> 
+                <ButtonMediaComponent
+                    loginType='Google'
+                    size={40}
+                    styleButton={{ background: 'rgb(66, 133, 244)', height: '48px', width: '100%', border: 'none', borderRadius: '4px', margin: '26px 0 10px' }}
+                    textbutton={"Đăng nhập bằng Google"}
+                    styletextbutton={{ color: "#fff", fontSize: "15px", fontWeight: "700" }}/>
+            </Loading>    
+            <Loading isLoading={isLoading}> 
+                <ButtonMediaComponent
+                    loginType='Facebook'
+                    size={40}
+                    styleButton={{ background: 'rgb(59, 89, 152)', height: '48px', width: '100%', border: 'none', borderRadius: '4px', margin: '26px 0 10px' }}
+                    textbutton={"Đăng nhập bằng Facebook"}
+                    styletextbutton={{ color: "#fff", fontSize: "15px", fontWeight: "700" }}/>
+            </Loading>    
+
         </WrapperContainerLeft>
 
         <WrapperContainerRight>

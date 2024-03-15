@@ -6,13 +6,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as UserService from '../../services/UserService'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import Loading from '../../components/LoadingComponent/Loading'
-import * as message from '../../components/Message/message'
+// import * as message from '../../components/Message/message'
+import MessageService from '../../components/Message/message'
 import { updateUser } from '../../redux/slides/userSlide'
-import { Button, Upload } from 'antd'
+import { Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { getBase64 } from '../../utils'
 
 const ProfilePage = () => {
+    const message = MessageService.getInstance()
     const user = useSelector((state) => state.user)
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
@@ -28,7 +30,6 @@ const ProfilePage = () => {
 
     const dispatch = useDispatch()
     const { data, isLoading, isSuccess, isError } = mutation
-
 
     useEffect(() => {
         setEmail(user?.email)
@@ -75,6 +76,7 @@ const ProfilePage = () => {
     const handleUpdate = () => {
         mutation.mutate({id: user?.id, email, name, phone, address, avatar, access_token: user?.access_token})
     }
+
   return (
     <div style={{width: '1270px', margin: '0 auto', height:'500px'}}>
       <WrapperHeader> Thông tin người dùng </WrapperHeader>
@@ -133,7 +135,6 @@ const ProfilePage = () => {
                             objectFit: 'cover'
                         }} alt='avatar'/>
                     )}
-                {/* <InputForm style={{width:"300px"}} id="avatar" value={avatar} onChange={handleOnchangeAvatar}/> */}
                 <ButtonComponent
                         onClick={handleUpdate}
                         size={40} 

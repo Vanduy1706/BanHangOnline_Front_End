@@ -19,7 +19,7 @@ const HeaderComponent = ({isHiddenSearch = false, isHiddenCart = false}) => {
   const [userName, setUserName] = useState('')
   const [userAvatar, setUserAvatar] = useState('')
   const [search, setSearch] = useState('')
-    const [isOpenPopup, setIsOpenPopup] = useState(false)
+  const [isOpenPopup, setIsOpenPopup] = useState(false)
   const order = useSelector((state) => state.order)
   const handleNavigateLogin = () => {
     navigate('/sign-in')
@@ -77,7 +77,7 @@ const HeaderComponent = ({isHiddenSearch = false, isHiddenCart = false}) => {
     <div style={{width:'100%',background:'#202124',display:'flex',justifyContent:'center'}}>
       <WrapperHeader style={{justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset'}}>
         <Col span={5}>
-         <WrapperTextHeader onClick={() => navigate('/')} style={{cursor:'pointer'}}><img src={Logo} width='100px' height='40px' /></WrapperTextHeader>
+         <WrapperTextHeader onClick={() => navigate('/')} style={{cursor:'pointer'}}><img src={Logo} alt='Hình ảnh' width='100px' height='40px' /></WrapperTextHeader>
         </Col>
 
         {!isHiddenSearch && (

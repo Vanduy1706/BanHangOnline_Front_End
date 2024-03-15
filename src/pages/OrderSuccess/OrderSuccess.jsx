@@ -1,6 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { Lable, WrapperCountOrder, WrapperInfo, WrapperContainer, WrapperValue, WrapperItemOrder, WrapperItemOrderInfo } from './style';
+import { Lable, WrapperInfo, WrapperContainer, WrapperValue, WrapperItemOrder, WrapperItemOrderInfo } from './style';
 import Loading from '../../components/LoadingComponent/Loading';
 import { useLocation } from 'react-router-dom';
 import { orderContant } from '../../contant';
@@ -39,7 +38,7 @@ export const OrderSuccess = () => {
                     return(
                       <WrapperItemOrder key={order?.name}>
                       <div style={{width: '500px', display:'flex', alignItems:'center', gap: 4}}>
-                        <img src={order?.image} style={{width: '77px', height:'79px', objectFit:'cover'}} />
+                        <img src={order?.image} style={{width: '77px', height:'79px', objectFit:'cover'}} alt='Hình ảnh'/>
                         <div style={{
                           width:'260px',
                           overflow:'hidden',

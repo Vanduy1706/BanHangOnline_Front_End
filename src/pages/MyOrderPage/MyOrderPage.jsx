@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as OrderService from '../../services/OrderService'
 import Loading from '../../components/LoadingComponent/Loading'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -13,16 +13,22 @@ export const MyOrderPage = () => {
   const location = useLocation()
   const { state } = location
   const navigate = useNavigate()
+  const[orders, setOrders] = useState([]);
   const fetchMyOrder = async () => {
-    const res = await OrderService.getOrderByUserId(state?.id, state?.token)
-    return res.data
+    try {
+      const res = await OrderService.getOrderByUserId(state?.id, state?.token);
+      return setOrders(res.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      throw error;
+    }
   }
-  
-  const queryOrder = useQuery({ queryKey: ['orders'],queryFn : fetchMyOrder }, {
+
+  const queryOrder = useQuery({ queryKey: ['orders'],queryFn : fetchMyOrder, refetchOnWindowFocus: false }, {
     enabled: state?.id && state?.token
   })
 
-  const { isLoading, data } = queryOrder
+  const { isLoading, refetch } = queryOrder
 
   const handleDetailsOrder = (id) => {
     navigate(`/details-order/${id}`, {
@@ -33,8 +39,8 @@ export const MyOrderPage = () => {
   }
 
   const mutation = useMutationhooks(
-    (data) => {
-      const { id, token, orderItems } = data
+    (orders) => {
+      const { id, token, orderItems } = orders
       const res = OrderService.cancelOrder(id, token, orderItems)
       return res
     }
@@ -43,7 +49,7 @@ export const MyOrderPage = () => {
   const handleCancelOrder = (order) => {
     mutation.mutate({id: order._id, token:state?.token, orderItems: order?.orderItems}, {
       onSuccess: () => {
-        queryOrder.refetch()
+        refetch()
       }
     })
   }
@@ -58,8 +64,8 @@ export const MyOrderPage = () => {
     }
   }, [isErrorCancel, isSuccessCancel])
 
-  const renderProduct = (data) => {
-   return data?.map((order) => {
+  const renderProduct = (orders) => {
+   return orders?.map((order) => {
       return (
         <WrapperHeaderItem key={order?._id}>
             <img src={order?.image} 
@@ -69,8 +75,9 @@ export const MyOrderPage = () => {
             objectFit:'cover',
             border: '1px solid rgb(238, 238, 238)',
             padding: '2px'
-        }} 
-      />
+            }} 
+            alt='Hình ảnh'
+        />
         <div style={{
           width:'260px',
           overflow:'hidden',
@@ -81,7 +88,8 @@ export const MyOrderPage = () => {
         </WrapperHeaderItem>
       )
     })
-  }
+  };
+
 
   return (
     <Loading isLoading={isLoading || isLoadingCancel}>
@@ -89,7 +97,7 @@ export const MyOrderPage = () => {
         <div style={{height:'100%',width:'1270px', margin:'0 auto'}}>
           <h4>Đơn hàng của tôi</h4>
           <WrapperListOrder>
-           {data?.map((order) => {
+           {orders?.map((order) => {
               return (
                 <WrapperItemOrder key={order?._id}>
                   <WrapperStatus>

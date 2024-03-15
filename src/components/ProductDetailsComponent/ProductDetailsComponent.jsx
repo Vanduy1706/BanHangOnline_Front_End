@@ -1,7 +1,6 @@
 import { Col, Row, Image, Rate, message } from 'antd'
-import React, { useEffect, useMemo, useState } from 'react'
-import ImageProductSmall from '../../assets/images/small.webp'
-import { WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, WrapperQualityProduct, WrapperStyleColImage, WrapperStyleImageSmall, WrapperStyleNameProduct, WrapperStyleTextSell } from './style'
+import React, { useEffect, useState } from 'react'
+import { WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, WrapperQualityProduct, WrapperStyleNameProduct, WrapperStyleTextSell } from './style'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import ButtonComponent from '../ButtonComponent/ButtonComponent'
 import * as ProductService from '../../services/ProductService'
@@ -36,6 +35,42 @@ const ProductDetailsComponent = ({idProduct}) => {
         }
     }
 
+    const handleChangeCount = (type, limited) => {
+        if(type === 'increase') {
+            if(!limited) {
+                setNumProduct(numProduct + 1)
+            }
+        }else {
+            if(!limited){
+                setNumProduct(numProduct - 1)
+            }
+        }
+    }
+
+    const {isLoading, data: productDetails} = useQuery(['product-details', idProduct], fetchGetDetailsProduct, {enabled: !!idProduct})
+    const handleAddOrderProduct = () => {
+        if(!user?.id) {
+            navigate('/sign-in', {state: location?.pathname})
+        }else {
+            const orderRedux = order?.orderItems?.find((item) => item.product === productDetails?._id) 
+            if((orderRedux?.amount + numProduct) <= orderRedux?.countInStock || (!orderRedux && productDetails?.countInStock > 0)) {
+                dispatch(addOrderProduct({
+                    orderItem: {
+                        name: productDetails?.name,
+                        amount: numProduct,//số lượng
+                        image: productDetails?.image,
+                        price: productDetails?.price,
+                        product: productDetails?._id,
+                        discount: productDetails?.discount,//mã giảm giá
+                        countInStock: productDetails?.countInStock//số lượng trong kho
+                    }
+                }))
+            }else {
+                setErrorLimitOrder(true)
+            }
+        }
+    }
+
     useEffect(() => {
         initFacebookSDK()
     }, [])
@@ -58,73 +93,11 @@ const ProductDetailsComponent = ({idProduct}) => {
         }
     }, [order.isSuccessOrder])
 
-    const handleChangeCount = (type, limited) => {
-        if(type === 'increase') {
-            if(!limited) {
-                setNumProduct(numProduct + 1)
-            }
-        }else {
-            if(!limited){
-                setNumProduct(numProduct - 1)
-            }
-        }
-    }
-
-    const {isLoading, data: productDetails} = useQuery(['product-details', idProduct], fetchGetDetailsProduct, {enabled: !!idProduct})
-    const handleAddOrderProduct = () => {
-        if(!user?.id) {
-            navigate('/sign-in', {state: location?.pathname})
-        }else {
-            // {
-            //     name: { type: String, required: true },
-            //     amount: { type: Number, required: true },
-            //     image: { type: String, required: true },
-            //     price: { type: Number, required: true },
-            //     discount: { type: Number },
-            //     product: {
-            //         type: mongoose.Schema.Types.ObjectId,
-            //         ref: 'Product',
-            //         required: true,
-            //     },
-            // },
-            const orderRedux = order?.orderItems?.find((item) => item.product === productDetails?._id) 
-            if((orderRedux?.amount + numProduct) <= orderRedux?.countInStock || (!orderRedux && productDetails?.countInStock > 0)) {
-                dispatch(addOrderProduct({
-                    orderItem: {
-                        name: productDetails?.name,
-                        amount: numProduct,//số lượng
-                        image: productDetails?.image,
-                        price: productDetails?.price,
-                        product: productDetails?._id,
-                        discount: productDetails?.discount,//mã giảm giá
-                        countInStock: productDetails?.countInStock//số lượng trong kho
-                    }
-                }))
-            }else {
-                setErrorLimitOrder(true)
-            }
-        }
-    }
-
   return (
     <Loading isLoading={isLoading}>
         <Row style={{padding:'16px', background:'#fff',borderRadius:"4px"}}>
             <Col span={10} style={{ borderRight:"1px solid #e5e5e5",paddingRight:"8px"}}>
                 <Image src={productDetails?.image} alt="image product" preview={false}/>
-                {/* <Row style={{paddingTop:"10px"}}>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleImageSmall src={ImageProductSmall} alt="image small" preview={false} />
-                    </WrapperStyleColImage>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleImageSmall src={ImageProductSmall} alt="image small" preview={false} />
-                    </WrapperStyleColImage>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleImageSmall src={ImageProductSmall} alt="image small" preview={false} />
-                    </WrapperStyleColImage>
-                    <WrapperStyleColImage span={4}>
-                        <WrapperStyleImageSmall src={ImageProductSmall} alt="image small" preview={false} />
-                    </WrapperStyleColImage>
-                </Row> */}
             </Col>
             <Col span={14} style={{paddingLeft:"10px"}}>
                 <WrapperStyleNameProduct>{productDetails?.name}</WrapperStyleNameProduct>

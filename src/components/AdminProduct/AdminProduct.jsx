@@ -8,7 +8,8 @@ import { getBase64, renderOptions } from '../../utils'
 import * as ProductService from '../../services/ProductService'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import Loading from '../../components/LoadingComponent/Loading'
-import * as message from '../../components/Message/message'
+// import * as message from '../../components/Message/message'
+import MessageService from '../../components/Message/message'
 import { useQuery } from '@tanstack/react-query'
 import DrawerComponent from '../DrawerComponent/DrawerComponent'
 import { useSelector } from 'react-redux'
@@ -16,6 +17,8 @@ import ModalComponent from '../ModalComponent/ModalComponent'
 
 
 const AdminProduct = () => {
+  const message = MessageService.getInstance()
+
   // Kiểm soát trạng thái đóng mở cửa sổ của tạo sản phẩm
   const [isModalOpen, setIsModalOpen] = useState(false);
 

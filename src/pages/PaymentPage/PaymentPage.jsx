@@ -9,7 +9,8 @@ import ModalComponent from '../../components/ModalComponent/ModalComponent';
 import InputComponent from '../../components/InputComponent/InputComponent';
 import * as UserService from '../../services/UserService'
 import * as OrderService from '../../services/OrderService'
-import * as message from '../../components/Message/message'
+// import * as message from '../../components/Message/message'
+import MessageService from '../../components/Message/message'
 import { useMutationhooks } from '../../hooks/useMutationHooks';
 import Loading from '../../components/LoadingComponent/Loading';
 import { updateUser } from '../../redux/slides/userSlide';
@@ -19,6 +20,7 @@ import { PayPalButton } from 'react-paypal-button-v2';
 import * as PaymentService from '../../services/PaymentService'
 
 export const PaymentPage = () => {
+  const message = MessageService.getInstance()
   const order = useSelector((state) => state.order)
   const user = useSelector((state) => state.user)
 

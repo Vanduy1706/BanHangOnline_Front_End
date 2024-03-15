@@ -9,9 +9,11 @@ import { EyeFilled,  EyeInvisibleFilled } from '@ant-design/icons'
 import * as UserService from '../../services/UserService'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import Loading from '../../components/LoadingComponent/Loading'
-import * as message from '../../components/Message/message'
+// import * as message from '../../components/Message/message'
+import MessageService from '../../components/Message/message'
 
 const SignUpPage = () => {
+  const message = MessageService.getInstance()
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false)
   const [email, setEmail] = useState('')

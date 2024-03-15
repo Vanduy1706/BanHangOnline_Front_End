@@ -6,14 +6,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as UserService from '../../services/UserService'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import Loading from '../../components/LoadingComponent/Loading'
-import * as message from '../../components/Message/message'
+// import * as message from '../../components/Message/message'
+import MessageService from '../../components/Message/message'
 import { updateUser } from '../../redux/slides/userSlide'
 import { Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { getBase64 } from '../../utils'
 
 const ProfilePage = () => {
-    
+    const message = MessageService.getInstance()
     const user = useSelector((state) => state.user)
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')

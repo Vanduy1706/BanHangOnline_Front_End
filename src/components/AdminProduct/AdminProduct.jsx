@@ -352,7 +352,7 @@ const AdminProduct = () => {
       image: stateProduct.image,
       type: stateProduct.type === 'add_type' ? stateProduct.newType : stateProduct.type,
       countInStock: stateProduct.countInStock,
-      discount: stateProduct.countInStock,
+      discount: stateProduct.discount,
     }
     mutation.mutate(params, {
       onSettled: () => {

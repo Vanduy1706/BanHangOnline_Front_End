@@ -9,8 +9,9 @@ const ButtonInputSearch = (props) => {
         backgroundColorInput = '#fff', 
         backgroundColorButton = '#e4002B',
         colorButton = '#fff'
-    } = props
-  return (
+    } = props;
+
+    return (
     <div style={{display:'flex',}}>
         <InputComponent //inputcomponent sẽ dùng nhìu nơi khác nhau
             size={size} 

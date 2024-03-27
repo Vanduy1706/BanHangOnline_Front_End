@@ -36,24 +36,25 @@ const SignUpPage = () => {
     }else if(isError){
       message.error()
     }
-  }, [isSuccess, isError])
+  }, [isSuccess, isError]);
 
   const handleOnchangePassword = (value) => {
     setPassword(value)
   }
 
   const handleOnchangeConfirmPassword = (value) => {
-    setConfirmPassword(value)
+    setConfirmPassword(value);
   }
 
   const navigate = useNavigate()
   const handleNavigateSignIn = () => {
-    navigate('/sign-in')
+    navigate('/sign-in');
   }
 
   const handleSignUp = () => {
       mutation.mutate({email, password, confirmPassword})
   } 
+
   return (
     <div style={{display:'flex',alignItems:'center',justifyContent:'center',background:'#ccc',height:'100vh'}}>
       <div style={{ width:'800px', height:'445px',borderRadius:'6px',background:'#fff',display:'flex'}}>
@@ -67,12 +68,12 @@ const SignUpPage = () => {
               style={{zIndex:'10',position:'absolute', top:'4px',right:'8px', paddingTop:'5px'}}>
               {isShowPassword ? (<EyeFilled />) : (<EyeInvisibleFilled />)}
             </span>
-            <InputForm placeholder="password" type={isShowPassword ? "text" : "password"} value={password} onChange={handleOnchangePassword}/>
+            <InputForm placeholder="password" type={isShowPassword ? "text" : "password"} value={password} onChange={handleOnchangePassword} />
           </div>
-          
+
           <div style={{position:'relative'}}>
             <span onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
-              style={{zIndex:'10',position:'absolute', top:'4px',right:'8px', paddingTop:'5px'}}>
+              style={{ zIndex: '10', position: 'absolute', top: '4px', right: '8px', paddingTop: '5px' }}>
               {isShowConfirmPassword ? (<EyeFilled />) : (<EyeInvisibleFilled />)}
             </span>
             <InputForm placeholder="ConfirmPassword" type={isShowConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={handleOnchangeConfirmPassword}/>

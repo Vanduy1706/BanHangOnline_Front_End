@@ -13,7 +13,8 @@ import Loading from '../../components/LoadingComponent/Loading'
 import { useDebounce } from '../../hooks/useDebounce'
 import FoodTypePage from '../FoodTypePages/FoodTypePages'
 
-const HomePage = () => {
+// Hàm Container Chỉ tập trung vào phần Logic
+const HomePageContainer = () => {
   const searchProduct = useSelector((state) => state?.product?.search)
   const searchDebounce = useDebounce(searchProduct, 500)
   const [loading, setLoading] = useState(false)
@@ -40,8 +41,19 @@ const HomePage = () => {
     fetchAllTypeProduct()
   }, [])
 
+  return <HomePage 
+    isLoading={isLoading || loading} 
+    typeProduct={typeProduct} 
+    products={products} 
+    isPreviousData={isPreviousData} 
+    setLimit={setLimit} 
+  />
+}
+
+// Đây là presentational component, Chuyên tập trung về UI 
+const HomePage = ({ isLoading, typeProduct, products, isPreviousData, setLimit }) => {
   return (
-    <Loading isLoading={isLoading || loading}>
+    <Loading isLoading={isLoading}>
       <div style={{ width:'1270px', margin:'0 auto' }}>
         <WrapperTypeProduct>
           {typeProduct.map((item) => {
@@ -91,4 +103,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default HomePageContainer

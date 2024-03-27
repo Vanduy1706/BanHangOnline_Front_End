@@ -2,6 +2,11 @@ import axios from "axios"
 
 export const axiosJWT = axios.create()
 
+export const loginWithGoogle = async (data) => {
+    const res = await axios.post(`${process.env.REACT_APP_URL_BACKEND}/user/login/google`, data)
+    return res.data
+}
+
 export const loginUser = async (data) => {
     const res = await axios.post(`${process.env.REACT_APP_URL_BACKEND}/user/sign-in`, data)
     return res.data

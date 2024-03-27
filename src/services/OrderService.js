@@ -1,4 +1,5 @@
 import { axiosJWT } from "./UserService"
+import axios from "axios"
 
 export const createOrder = async (data, access_token) => {
     const res = await axiosJWT.post(`${process.env.REACT_APP_URL_BACKEND}/order/create`, data, {
@@ -20,6 +21,20 @@ export const getOrderByUserId = async (id, access_token) => {
 
 export const getDetailsOrder = async (id, access_token) => {
     const res = await axiosJWT.get(`${process.env.REACT_APP_URL_BACKEND}/order/get-details-order/${id}`, {
+        headers: {
+            token: `Bearer ${access_token}`,
+        }
+    })
+    return res.data
+}
+
+export const getDetailsOrderAdmin = async (id) => {
+    const res = await axios.get(`${process.env.REACT_APP_URL_BACKEND}/order/get-details-order-admin/${id}`)
+    return res.data
+}
+
+export const updateOrder = async (id, access_token, data) => {
+    const res = await axiosJWT.put(`${process.env.REACT_APP_URL_BACKEND}/order/update/${id}`, data, {
         headers: {
             token: `Bearer ${access_token}`,
         }

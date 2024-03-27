@@ -109,7 +109,7 @@ export const OrderPage = () => {
    const priceDiscountMemo = useMemo(() => {//giam gia
     const result = order?.orderItemsSelected?.reduce((total, cur) => {
       const totalDiscount = cur.discount ? cur.discount : 0
-      return total + (priceMemo * (totalDiscount  * cur.amount) / 100)
+      return (priceMemo * (totalDiscount) / 100)
     },0)
     if(Number(result)){
       return result

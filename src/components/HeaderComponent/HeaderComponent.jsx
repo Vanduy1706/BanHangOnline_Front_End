@@ -31,6 +31,7 @@ const HeaderComponent = ({isHiddenSearch = false, isHiddenCart = false}) => {
     dispatch(resetUser())
     localStorage.removeItem('access_token')//remove nó là ko bị khi bắt đầu npm start không bị lỗi
     setLoading(false)
+    navigate('/')
   }
 
   useEffect(() => {

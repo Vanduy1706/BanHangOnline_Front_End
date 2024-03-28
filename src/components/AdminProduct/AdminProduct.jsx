@@ -14,10 +14,12 @@ import { useQuery } from '@tanstack/react-query'
 import DrawerComponent from '../DrawerComponent/DrawerComponent'
 import { useSelector } from 'react-redux'
 import ModalComponent from '../ModalComponent/ModalComponent'
+import { useNavigate } from 'react-router-dom'
 
 
 const AdminProduct = () => {
   const message = MessageService.getInstance()
+  const navigate = useNavigate()
 
   // Kiểm soát trạng thái đóng mở cửa sổ của tạo sản phẩm
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -113,23 +115,32 @@ const AdminProduct = () => {
 
   // Các hàm dùng để gọi các dịch vụ để lấy dữ liệu sản phẩm từ máy chủ
   const getAllProduct = async () => {
-    const res = await ProductService.getAllProduct()
-    return res
+    if(user?.access_token) {
+      const res = await ProductService.getAllProduct()
+      return res
+    } else {
+      navigate('/')
+      message.error('Lỗi')
+    }
   }
 
   const fetchGetDetailsProduct = async (rowSelected) => {
-    const res = await ProductService.getDetailsProduct(rowSelected)
-    if(res?.data) {
-      setStateProductDetails({
-        name: res?.data?.name,
-        price: res?.data?.price,
-        description: res?.data?.description,
-        rating: res?.data?.rating,
-        image: res?.data?.image,
-        type: res?.data?.type,
-        countInStock: res?.data?.countInStock,
-        discount: res?.data?.discount
-      })
+    if(user?.access_token) {
+      const res = await ProductService.getDetailsProduct(rowSelected)
+      if(res?.data) {
+        setStateProductDetails({
+          name: res?.data?.name,
+          price: res?.data?.price,
+          description: res?.data?.description,
+          rating: res?.data?.rating,
+          image: res?.data?.image,
+          type: res?.data?.type,
+          countInStock: res?.data?.countInStock,
+          discount: res?.data?.discount
+        })
+      }
+    } else {
+      message.error('Lỗi')
     }
     setIsLoadingUpdate(false)
   }

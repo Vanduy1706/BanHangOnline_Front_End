@@ -8,8 +8,10 @@ import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import { convertPice } from '../../utils'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import { message } from 'antd'
+import { useSelector } from 'react-redux'
 
 export const MyOrderPage = () => {
+  const user = useSelector((state) => state?.user)
   const location = useLocation()
   const { state } = location
   const navigate = useNavigate()
@@ -92,79 +94,83 @@ export const MyOrderPage = () => {
 
 
   return (
-    <Loading isLoading={isLoading || isLoadingCancel}>
-      <WrapperContainer>
-        <div style={{height:'100%',width:'1270px', margin:'0 auto'}}>
-          <h4>Đơn hàng của tôi</h4>
-          <WrapperListOrder>
-           {orders?.map((order) => {
-              return (
-                <WrapperItemOrder key={order?._id}>
-                  <WrapperStatus>
-                    <span style={{fontSize: '14px', fontWeight: ' bold'}}>Trạng Thái</span>
-                    <div><span style={{color:'rgb(255, 66, 78)'}}>Giao hàng: </span>{`${order.isDelivered ? 'Đã giao hàng' : 'Chưa giao hàng'}`}</div>
-                    <div><span style={{color:'rgb(255, 66, 78)'}}>Thanh toán: </span>{`${order.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}`}</div>
-                  </WrapperStatus>
-                  {renderProduct(order?.orderItems)}
-                  <WrapperFooterItem>
-                    <div>
-                      <span style={{color:'rgb(255, 66, 78)'}}>Tổng tiền: </span>
-                      <span style={{fontSize:'13px', color:'rgb(56, 56, 61)',fontWeight: 700}}>{convertPice(order?.totalPrice)}</span>
-                    </div>
-                    <div style={{display:'flex', gap:'10px'}}>
-                      {!order.isDelivered && !order.isPaid ? (
-                        <ButtonComponent
-                              onClick={() => handleCancelOrder(order)}
-                              size={40}
-                              styleButton={{
-                                height:'36px',
-                                border: '1px solid rgb(11, 116, 229)',
-                                borderRadius:'4px'
-                              }}
-                              textbutton={'Hủy đơn hàng'}
-                              styletextbutton={{color:'rgb(11, 116, 229)', fontSize:'14px'}}
-                            >
-                            </ButtonComponent>
-                      ) : (
-                        <React.Fragment>
-                          {order.isDelivered && order.isPaid ? (
+    <>
+      {user?.access_token ? (
+        <Loading isLoading={isLoading || isLoadingCancel}>
+          <WrapperContainer>
+            <div style={{height:'100%',width:'1270px', margin:'0 auto'}}>
+              <h4>Đơn hàng của tôi</h4>
+              <WrapperListOrder>
+              {orders?.map((order) => {
+                  return (
+                    <WrapperItemOrder key={order?._id}>
+                      <WrapperStatus>
+                        <span style={{fontSize: '14px', fontWeight: ' bold'}}>Trạng Thái</span>
+                        <div><span style={{color:'rgb(255, 66, 78)'}}>Giao hàng: </span>{`${order.isDelivered ? 'Đã giao hàng' : 'Chưa giao hàng'}`}</div>
+                        <div><span style={{color:'rgb(255, 66, 78)'}}>Thanh toán: </span>{`${order.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}`}</div>
+                      </WrapperStatus>
+                      {renderProduct(order?.orderItems)}
+                      <WrapperFooterItem>
+                        <div>
+                          <span style={{color:'rgb(255, 66, 78)'}}>Tổng tiền: </span>
+                          <span style={{fontSize:'13px', color:'rgb(56, 56, 61)',fontWeight: 700}}>{convertPice(order?.totalPrice)}</span>
+                        </div>
+                        <div style={{display:'flex', gap:'10px'}}>
+                          {!order.isDelivered && !order.isPaid ? (
                             <ButtonComponent
-                            // onClick={() => handleCancelOrder(order)}
+                                  onClick={() => handleCancelOrder(order)}
+                                  size={40}
+                                  styleButton={{
+                                    height:'36px',
+                                    border: '1px solid rgb(11, 116, 229)',
+                                    borderRadius:'4px'
+                                  }}
+                                  textbutton={'Hủy đơn hàng'}
+                                  styletextbutton={{color:'rgb(11, 116, 229)', fontSize:'14px'}}
+                                >
+                                </ButtonComponent>
+                          ) : (
+                            <React.Fragment>
+                              {order.isDelivered && order.isPaid ? (
+                                <ButtonComponent
+                                // onClick={() => handleCancelOrder(order)}
+                                size={40}
+                                styleButton={{
+                                  height:'36px',
+                                  border: '1px solid rgb(11, 116, 229)',
+                                  borderRadius:'4px',
+                                  background: '#0b74e5'             
+                                }}
+                                textbutton={'Mua lại'}
+                                styletextbutton={{color:'#eee', fontSize:'14px'}}
+                                >
+                                </ButtonComponent>
+                              ) : null}
+                            </React.Fragment>
+                          )}
+                          <ButtonComponent
+                            onClick={() => handleDetailsOrder(order?._id)}
                             size={40}
                             styleButton={{
                               height:'36px',
                               border: '1px solid rgb(11, 116, 229)',
-                              borderRadius:'4px',
-                              background: '#0b74e5'             
+                              borderRadius:'4px'
                             }}
-                            textbutton={'Mua lại'}
-                            styletextbutton={{color:'#eee', fontSize:'14px'}}
-                            >
-                            </ButtonComponent>
-                          ) : null}
-                        </React.Fragment>
-                      )}
-                       <ButtonComponent
-                        onClick={() => handleDetailsOrder(order?._id)}
-                        size={40}
-                        styleButton={{
-                          height:'36px',
-                          border: '1px solid rgb(11, 116, 229)',
-                          borderRadius:'4px'
-                        }}
-                        textbutton={'Xem chi tiết'}
-                        styletextbutton={{color:'rgb(11, 116, 229)', fontSize:'14px'}}
-                      >
-                      </ButtonComponent>
-                    </div>
-                  </WrapperFooterItem>
-                </WrapperItemOrder>
-              )
-            })}
-          </WrapperListOrder>
-        </div>
-      </WrapperContainer>
-    </Loading>
+                            textbutton={'Xem chi tiết'}
+                            styletextbutton={{color:'rgb(11, 116, 229)', fontSize:'14px'}}
+                          >
+                          </ButtonComponent>
+                        </div>
+                      </WrapperFooterItem>
+                    </WrapperItemOrder>
+                  )
+                })}
+              </WrapperListOrder>
+            </div>
+          </WrapperContainer>
+        </Loading>
+      ) : null}
+    </>
   )
 }
 

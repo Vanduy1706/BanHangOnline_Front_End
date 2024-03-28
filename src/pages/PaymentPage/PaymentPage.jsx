@@ -245,137 +245,142 @@ export const PaymentPage = () => {
 
 
   return (
-      <div style={{background: '#f5f5fa', width:'100%', height: '100vh'}}>
-        <Loading isLoading={isLoadingAddOrder}>
-          <div style={{height: '100%', width: '1270px', margin: '0 auto'}}>
-            <h3>Thanh Toán</h3>
-            <div style={{display:'flex', justifyContent:'center'}}>
-              <WrapperLeft>
-               <WrapperInfo>
-                  <div>
-                    <Lable>Chọn phương thức giao hàng</Lable>
-                    <WrapperRadio onChange={handleDilivery} value={delivery}>
-                      <Radio value="fast"><span style={{color: '#ea8500', fontWeight:'bold'}}>FAST</span>Giao hàng tiết kiệm</Radio>
-                      <Radio value="ShopeFood"><span style={{color: '#ea8500', fontWeight:'bold'}}>ShopeFood</span>Giao hàng tiết kiệm</Radio>
+    <>
+      {user?.access_token ? (
+        <div style={{background: '#f5f5fa', width:'100%', height: '100vh'}}>
+          <Loading isLoading={isLoadingAddOrder}>
+            <div style={{height: '100%', width: '1270px', margin: '0 auto'}}>
+              <h3>Thanh Toán</h3>
+              <div style={{display:'flex', justifyContent:'center'}}>
+                <WrapperLeft>
+                 <WrapperInfo>
+                    <div>
+                      <Lable>Chọn phương thức giao hàng</Lable>
+                      <WrapperRadio onChange={handleDilivery} value={delivery}>
+                        <Radio value="fast"><span style={{color: '#ea8500', fontWeight:'bold'}}>FAST</span>Giao hàng tiết kiệm</Radio>
+                        <Radio value="ShopeFood"><span style={{color: '#ea8500', fontWeight:'bold'}}>ShopeFood</span>Giao hàng tiết kiệm</Radio>
+                      </WrapperRadio>
+                    </div>
+                  </WrapperInfo>
+                  <WrapperInfo>
+                    <div>
+                    <Lable>Chọn phương thức thanh toán</Lable>
+                    <WrapperRadio onChange={handlePayment} value={payment}>
+                      <Radio value="later_money">Thanh toán tiền mặt khi nhận hàng</Radio>
+                      <Radio value="paypal">Thanh toán tiền bằng paypal</Radio>
                     </WrapperRadio>
                   </div>
-                </WrapperInfo>
-                <WrapperInfo>
-                  <div>
-                  <Lable>Chọn phương thức thanh toán</Lable>
-                  <WrapperRadio onChange={handlePayment} value={payment}>
-                    <Radio value="later_money">Thanh toán tiền mặt khi nhận hàng</Radio>
-                    <Radio value="paypal">Thanh toán tiền bằng paypal</Radio>
-                  </WrapperRadio>
-                </div>
-                </WrapperInfo>
-              </WrapperLeft>
-              <WrapperRight>
-                <div style={{width: '100%'}}>
-                  <WrapperInfo style={{width: '100%'}}>
-                    <div>
-                      <span>Địa chỉ: </span>
-                      <span style={{fontWeight: 'bold'}}>{`${user?.address} ${user?.city}`} </span>
-                      <span onClick={handleChangeAddress} style={{color:'blue',cursor:'pointer'}}>Thay đổi</span>
-                    </div>
                   </WrapperInfo>
-                  <WrapperInfo style={{width: '100%'}}>
-                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-                      <span>Tạm tính</span>
-                      <span style={{color: '#000', fontSize:'14px', fontWeight:'bold'}}>{convertPice(priceMemo)}</span>
-                    </div>
-                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-                      <span>Giảm giá</span>
-                      <span style={{color: '#000', fontSize:'14px', fontWeight:'bold'}}>{convertPice(priceDiscountMemo)}</span>
-                    </div>
-                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-                      <span>Phí giao hàng</span>
-                      <span style={{color: '#000', fontSize:'14px', fontWeight:'bold'}}>{convertPice(diliveryPriceMemo)}</span>
-                    </div>
-                  </WrapperInfo>
-                  <WrapperTotal style={{width: '100%'}}>
-                    <span>Tổng tiền</span>
-                    <span style={{display:'flex', flexDirection:'column'}}>
-                      <span style={{color: 'rgb(254, 56, 52)', fontSize:'24px',fontWeight:'bold'}}>{convertPice(totalPriceMemo)}</span>
-                      <span style={{color:'#000', fontSize:'11px'}}>(Đã bao gồm VAT nếu có)</span>
-                    </span>
-                  </WrapperTotal>
-                </div>
-                {payment === 'paypal' && sdkReady  ? (
-                  <div style={{width:'360px', marginLeft: '40px'}}>
-                  <PayPalButton
-                          amount={Math.round(totalPriceMemo / 30000)}
-                          // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
-                          onSuccess={onSuccessPaypal}
-                          onError={() => {
-                            alert('Error')
-                          }}
-                        />
+                </WrapperLeft>
+                <WrapperRight>
+                  <div style={{width: '100%'}}>
+                    <WrapperInfo style={{width: '100%'}}>
+                      <div>
+                        <span>Địa chỉ: </span>
+                        <span style={{fontWeight: 'bold'}}>{`${user?.address} ${user?.city}`} </span>
+                        <span onClick={handleChangeAddress} style={{color:'blue',cursor:'pointer'}}>Thay đổi</span>
+                      </div>
+                    </WrapperInfo>
+                    <WrapperInfo style={{width: '100%'}}>
+                      <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                        <span>Tạm tính</span>
+                        <span style={{color: '#000', fontSize:'14px', fontWeight:'bold'}}>{convertPice(priceMemo)}</span>
+                      </div>
+                      <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                        <span>Giảm giá</span>
+                        <span style={{color: '#000', fontSize:'14px', fontWeight:'bold'}}>{convertPice(priceDiscountMemo)}</span>
+                      </div>
+                      <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                        <span>Phí giao hàng</span>
+                        <span style={{color: '#000', fontSize:'14px', fontWeight:'bold'}}>{convertPice(diliveryPriceMemo)}</span>
+                      </div>
+                    </WrapperInfo>
+                    <WrapperTotal style={{width: '100%'}}>
+                      <span>Tổng tiền</span>
+                      <span style={{display:'flex', flexDirection:'column'}}>
+                        <span style={{color: 'rgb(254, 56, 52)', fontSize:'24px',fontWeight:'bold'}}>{convertPice(totalPriceMemo)}</span>
+                        <span style={{color:'#000', fontSize:'11px'}}>(Đã bao gồm VAT nếu có)</span>
+                      </span>
+                    </WrapperTotal>
                   </div>
-                ) : (
-                <ButtonComponent
-                      onClick={() => handleAddOrder()}
-                      size={40} 
-                      styleButton={{
-                          background : 'rgb(255, 57, 69)', 
-                          height:'48px',
-                          width:'360px',
-                          border:'none',
-                          borderRadius:'4px',
-                          marginLeft: ' 40px'
-                      }}
-                      textbutton={"Đặt Hàng"}
-                      styletextbutton={{color:"#fff",fontSize:"15px",fontWeight:"700"}} />
-                )}
-              </WrapperRight>
+                  {payment === 'paypal' && sdkReady  ? (
+                    <div style={{width:'360px', marginLeft: '40px'}}>
+                    <PayPalButton
+                            amount={Math.round(totalPriceMemo / 30000)}
+                            // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                            onSuccess={onSuccessPaypal}
+                            onError={() => {
+                              alert('Error')
+                            }}
+                          />
+                    </div>
+                  ) : (
+                  <ButtonComponent
+                        onClick={() => handleAddOrder()}
+                        size={40} 
+                        styleButton={{
+                            background : 'rgb(255, 57, 69)', 
+                            height:'48px',
+                            width:'360px',
+                            border:'none',
+                            borderRadius:'4px',
+                            marginLeft: ' 40px'
+                        }}
+                        textbutton={"Đặt Hàng"}
+                        styletextbutton={{color:"#fff",fontSize:"15px",fontWeight:"700"}} />
+                  )}
+                </WrapperRight>
+              </div>
             </div>
-          </div>
-          <ModalComponent forceRender title="Cập nhật thông tin giao hàng" open={isOpenModalUpdateInfo} onCancel={handleCancelUpdate} onOk={handleUpdateInfoUser}>
-              <Loading isLoading={isLoading}>
-              <Form
-            name="basic"
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 20 }}
-            // onFinish={onUpdateUser}
-            autoComplete="on"
-            form={form}
-          >
-            <Form.Item
-              label="Name"
-              name="name"
-              rules={[{ required: true, message: 'Please input your name!' }]}
+            <ModalComponent forceRender title="Cập nhật thông tin giao hàng" open={isOpenModalUpdateInfo} onCancel={handleCancelUpdate} onOk={handleUpdateInfoUser}>
+                <Loading isLoading={isLoading}>
+                <Form
+              name="basic"
+              labelCol={{ span: 4 }}
+              wrapperCol={{ span: 20 }}
+              // onFinish={onUpdateUser}
+              autoComplete="on"
+              form={form}
             >
-              <InputComponent  value={stateUserDetails['name']} onChange={handleOnchangeDetails} name="name"/>
-            </Form.Item>
-
-            <Form.Item
-              label="City"
-              name="city"
-              rules={[{ required: true, message: 'Please input your city!' }]}
-            >
-              <InputComponent  value={stateUserDetails.city} onChange={handleOnchangeDetails} name="city"/>
-            </Form.Item>
-            
-            <Form.Item
-              label="Phone"
-              name="phone"
-              rules={[{ required: true, message: 'Please input your phone!' }]}
-            >
-              <InputComponent value={stateUserDetails.phone} onChange={handleOnchangeDetails} name="phone"/>
-            </Form.Item>
-
-            <Form.Item
-              label="Address"
-              name="address"
-              rules={[{ required: true, message: 'Please input your address!' }]}
-            >
-              <InputComponent value={stateUserDetails.address} onChange={handleOnchangeDetails} name="address"/>
-            </Form.Item>
-            </Form>                 
-              </Loading>
-          </ModalComponent>
-        </Loading>
-      </div>
+              <Form.Item
+                label="Name"
+                name="name"
+                rules={[{ required: true, message: 'Please input your name!' }]}
+              >
+                <InputComponent  value={stateUserDetails['name']} onChange={handleOnchangeDetails} name="name"/>
+              </Form.Item>
+  
+              <Form.Item
+                label="City"
+                name="city"
+                rules={[{ required: true, message: 'Please input your city!' }]}
+              >
+                <InputComponent  value={stateUserDetails.city} onChange={handleOnchangeDetails} name="city"/>
+              </Form.Item>
+              
+              <Form.Item
+                label="Phone"
+                name="phone"
+                rules={[{ required: true, message: 'Please input your phone!' }]}
+              >
+                <InputComponent value={stateUserDetails.phone} onChange={handleOnchangeDetails} name="phone"/>
+              </Form.Item>
+  
+              <Form.Item
+                label="Address"
+                name="address"
+                rules={[{ required: true, message: 'Please input your address!' }]}
+              >
+                <InputComponent value={stateUserDetails.address} onChange={handleOnchangeDetails} name="address"/>
+              </Form.Item>
+              </Form>                 
+                </Loading>
+            </ModalComponent>
+          </Loading>
+        </div>
+  
+      ) : null}
+    </>
   )
 }
 

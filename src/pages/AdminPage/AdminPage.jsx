@@ -6,8 +6,10 @@ import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import AdminUser from '../../components/AminUser/AdminUser';
 import AdminProduct from '../../components/AdminProduct/AdminProduct';
 import OrderAdmin from '../../components/OrderAdmin/OrderAdmin';
+import { useSelector } from 'react-redux';
 
 const AdminPage = () => {
+  const user = useSelector((state) => state?.user);
   const items = [
     getItem('Người Dùng', 'user', <UserOutlined />),
     getItem('Sản Phẩm', 'product', <AppstoreOutlined />),
@@ -40,22 +42,26 @@ const AdminPage = () => {
 
   return (
     <>
-      <HeaderComponent isHiddenSearch isHiddenCart/>
-        <div style={{display:'flex', overflow:'hidden'}}>
-          <Menu
-            mode="inline"
-            style={{
-              width: 256,
-              boxShadow: '1px 1px 2px #ccc',
-              height: '100vh'  
-            }}
-            items={items}
-            onClick={handleOnclick}
-          />
-          <div style={{flex: 1, padding:'15px 0 15px 15px'}}>
-              {renderPage(keySelected)}
-          </div>
-        </div>
+      {user?.access_token ? (
+        <>
+          <HeaderComponent isHiddenSearch isHiddenCart/>
+            <div style={{display:'flex', overflow:'hidden'}}>
+              <Menu
+                mode="inline"
+                style={{
+                  width: 256,
+                  boxShadow: '1px 1px 2px #ccc',
+                  height: '100vh'  
+                }}
+                items={items}
+                onClick={handleOnclick}
+              />
+              <div style={{flex: 1, padding:'15px 0 15px 15px'}}>
+                  {renderPage(keySelected)}
+              </div>
+            </div>
+        </>
+      ) : null}
     </>
   )
 }

@@ -16,9 +16,10 @@ import Loading from '../../components/LoadingComponent/Loading'
 import {Form } from 'antd'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import MessageService from '../../components/Message/message'
-
+import { useNavigate } from 'react-router-dom'
 
 const OrderAdmin = () => {
+  const navigate = useNavigate()
   const message = MessageService.getInstance()
   
   const user = useSelector((state) => state?.user)
@@ -34,8 +35,13 @@ const OrderAdmin = () => {
   const [stateOrderDetails, setStateOrderDetails] = useState(initial())
 
   const getAllOrder = async () => { 
-    const res = await OrderService.getAllOrder(user?.access_token)
-    return res
+    if(user?.access_token){
+      const res = await OrderService.getAllOrder(user?.access_token)
+      return res
+    } else {
+      navigate('/')
+      message.error('Lỗi')
+    }
   }
 
   const queryOrder = useQuery({ queryKey: ['orders'],queryFn : getAllOrder })
@@ -188,13 +194,21 @@ const OrderAdmin = () => {
 
 
   const fetchGetDetailsOrder = async (rowSelected) => {
-    const res = await OrderService.getDetailsOrderAdmin(rowSelected)
-    console.log(res)
-    if(res?.data) {
-      setStateOrderDetails({
-        isDelivered: res?.data?.isDelivered,
-        isPaid: res?.data?.isPaid
-      })
+    if(user?.access_token){
+      const res = await OrderService.getDetailsOrderAdmin(rowSelected, user?.access_token)
+      if(res?.status !== 'ERROR') {
+        console.log(res)
+        if(res?.data) {
+          setStateOrderDetails({
+            isDelivered: res?.data?.isDelivered,
+            isPaid: res?.data?.isPaid
+          })
+        }
+      } else {
+        message.error('Lỗi')
+      }
+    } else {
+      message.error('Lỗi')
     }
     setIsLoadingUpdate(false)
   }

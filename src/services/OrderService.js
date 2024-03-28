@@ -28,8 +28,12 @@ export const getDetailsOrder = async (id, access_token) => {
     return res.data
 }
 
-export const getDetailsOrderAdmin = async (id) => {
-    const res = await axios.get(`${process.env.REACT_APP_URL_BACKEND}/order/get-details-order-admin/${id}`)
+export const getDetailsOrderAdmin = async (id, access_token) => {
+    const res = await axiosJWT.get(`${process.env.REACT_APP_URL_BACKEND}/order/get-details-order-admin/${id}`, {
+        headers: {
+            token: `Bearer ${access_token}`
+        }
+    })
     return res.data
 }
 

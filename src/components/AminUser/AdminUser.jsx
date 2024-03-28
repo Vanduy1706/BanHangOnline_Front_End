@@ -14,8 +14,10 @@ import { useSelector } from 'react-redux'
 import { useMutationhooks } from '../../hooks/useMutationHooks'
 import * as UserService from '../../services/UserService'
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 
 const AdminUser = () => {
+  const navigate = useNavigate()
   const message = MessageService.getInstance()
   const [rowSelected, setRowSelected] = useState('')
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
@@ -82,21 +84,30 @@ const AdminUser = () => {
 
   // Các hàm dùng để gọi các dịch vụ để lấy dữ liệu sản phẩm từ máy chủ
   const getAllUsers = async () => {
-    const res = await UserService.getAllUser(user?.access_token)
-    return res
+    if(user?.access_token){
+      const res = await UserService.getAllUser(user?.access_token)
+      return res
+    } else {
+      navigate('/')
+      message.error('Lỗi')
+    }
   }
 
   const fetchGetDetailsUser = async (rowSelected) => {
-    const res = await UserService.getDetailsUser(rowSelected)
-    if(res?.data) {
-      setStateUserDetails({
-        name: res?.data?.name,
-        email: res?.data?.email,
-        phone: res?.data?.phone,
-        isAdmin: res?.data?.isAdmin,
-        address: res?.data?.address,
-        avatar: res?.data?.avatar
-      })
+    if(user?.access_token) {
+      const res = await UserService.getDetailsUser(rowSelected, user?.access_token)
+      if(res?.data) {
+        setStateUserDetails({
+          name: res?.data?.name,
+          email: res?.data?.email,
+          phone: res?.data?.phone,
+          isAdmin: res?.data?.isAdmin,
+          address: res?.data?.address,
+          avatar: res?.data?.avatar
+        })
+      }
+    } else {
+      message.error('Lỗi')
     }
     setIsLoadingUpdate(false)
   }
